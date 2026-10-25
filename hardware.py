@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 import tempfile
 
 import bench
@@ -12,7 +13,6 @@ ROOT = bench.ROOT
 BINARY = ROOT / "build/ig-parallel.exe"
 FLAGS = ["-std=c++20", "-O3", "-DNDEBUG", "-march=x86-64-v3", "-static", "-pthread"]
 original_command = bench.command
-original_runtime = bench.runtime_versions
 original_instances = bench.generate_instances
 
 
@@ -24,10 +24,15 @@ def source_hash():
 
 
 def build():
-    command = ["g++", *FLAGS, "-I", ROOT / "solvers/cpp", ROOT / "experiments/parallel.cpp", "-o", BINARY]
-    bench.call(command)
-    metadata = {"source_hash": source_hash(), "command": list(map(str, command)),
+    BINARY.parent.mkdir(parents=True, exist_ok=True)
+    commands = [
+        ["g++", "-std=c++20", "-O3", "-DNDEBUG", "-static-libgcc", "-static-libstdc++", ROOT / "solvers/cpp/main.cpp", "-o", ROOT / "build/cpp.exe"],
+        ["g++", *FLAGS, "-I", ROOT / "solvers/cpp", ROOT / "experiments/parallel.cpp", "-o", BINARY],
+    ]
+    for command in commands: bench.call(command)
+    metadata = {"source_hash": source_hash(), "commands": [list(map(str, command)) for command in commands],
                 "compiler": bench.call(["g++", "--version"], capture_output=True).stdout.strip(),
+                "reference_hash": hashlib.sha256((ROOT / "build/cpp.exe").read_bytes()).hexdigest(),
                 "binary_hash": hashlib.sha256(BINARY.read_bytes()).hexdigest()}
     (ROOT / "build/hardware.json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")
     return metadata
@@ -35,17 +40,22 @@ def build():
 
 def configure():
     path = ROOT / "build/hardware.json"
-    metadata = json.loads(path.read_text()) if path.exists() and BINARY.exists() else {}
+    metadata = json.loads(path.read_text()) if path.exists() and BINARY.exists() and (ROOT / "build/cpp.exe").exists() else {}
     if metadata.get("source_hash") != source_hash(): metadata = build()
 
     def command(language):
         if source_hash() != metadata["source_hash"] or hashlib.sha256(BINARY.read_bytes()).hexdigest() != metadata["binary_hash"]:
             raise RuntimeError("Cambió la variante experimental durante la campaña")
-        if language == "cpp-ref": return original_command("cpp")
+        if language == "cpp-ref":
+            if hashlib.sha256((ROOT / "build/cpp.exe").read_bytes()).hexdigest() != metadata["reference_hash"]:
+                raise RuntimeError("Cambió la referencia durante la campaña")
+            return original_command("cpp")
         return [str(BINARY), "--threads", language.removeprefix("cpp-v3-t")]
 
     bench.command = command
-    bench.runtime_versions = lambda: original_runtime() | {"hardware": metadata}
+    bench.runtime_versions = lambda: {"controller_python": sys.version, "hardware": metadata}
+    bench.build = lambda: {"cpp": metadata["compiler"], "commands": metadata["commands"],
+                          "source_hash": bench.fingerprint()} | bench.runtime_versions()
 
 
 def checks():
