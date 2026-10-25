@@ -1,0 +1,7 @@
+.venv/
+.tools/
+build/
+results/
+submission/
+__pycache__/
+*.pyc
