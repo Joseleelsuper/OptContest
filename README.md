@@ -96,3 +96,9 @@ python hardware.py export --team XX --threads 0
 Sustituye `XX` por el número de equipo. La exportación incluye las fuentes necesarias y el comando de compilación, sin dependencias adicionales a Windows. AVX2 requiere una CPU compatible; tanto el i7-13620H local como el Ryzen 9 9900X de las bases lo admiten.
 
 Las nuevas pruebas comparan únicamente C++/IG: referencia original y variante AVX2 con 1, 2, 4, 8 y todos los hilos. Usan las cinco instancias de ajuste y dos semillas, siempre con 57 s de CPU total. Los 60 resultados se guardan en `results/hardware/`, con reanudación e informe HTML. La selección depende de Fmed bajo ese presupuesto; más hilos pueden consumirlo antes sin mejorar la solución. El ajuste específico del Ryzen requiere medir en ese equipo.
+
+Para confirmar la selección de dos hilos, `instances/hardware-validation/` contiene diez instancias nuevas, generadas con `random.Random(3001)` a `random.Random(3010)`, de 75 × 20 y duraciones uniformes enteras de 1 a 99. Se comparan referencia y dos hilos con cinco semillas y 57 s de CPU total: 100 ejecuciones. El directorio de resultados es independiente de las campañas anteriores; el mismo comando permite reanudar.
+
+```powershell
+python hardware.py run --instance-dir instances/hardware-validation --instances 10 --repetitions 5 --threads 2 --results results/hardware-validation
+```

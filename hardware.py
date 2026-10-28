@@ -109,7 +109,8 @@ def main():
     commands = parser.add_subparsers(dest="action", required=True)
     commands.add_parser("build"); commands.add_parser("check")
     run = commands.add_parser("run")
-    run.add_argument("--instances", type=int, choices=range(1, 6), default=5)
+    run.add_argument("--instances", type=int, choices=range(1, 11), default=5)
+    run.add_argument("--instance-dir", type=Path)
     run.add_argument("--repetitions", type=int, choices=range(1, 6), default=2)
     run.add_argument("--threads", nargs="+", type=int, default=[1, 2, 4, 8, 0])
     run.add_argument("--results", default=str(ROOT / "results/hardware"))
@@ -126,8 +127,9 @@ def main():
     configure()
     if args.action == "check": checks()
     else:
-        original_instances(10)
-        bench.generate_instances = lambda count: [ROOT / "instances/tuning" / f"{i + 1:02}.txt" for i in range(count)]
+        if args.instance_dir is None: original_instances(10)
+        folder = ROOT / (args.instance_dir or "instances/tuning")
+        bench.generate_instances = lambda count: [folder / f"{i + 1:02}.txt" for i in range(count)]
         args.languages = ["cpp-ref"] + [f"cpp-v3-t{n}" for n in dict.fromkeys(args.threads)]
         args.algorithms, args.phase, args.cpu_budget = ["ig"], "cpu", 57
         bench.run(args)
