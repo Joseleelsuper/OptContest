@@ -1,0 +1,93 @@
+{
+  "config": {
+    "instances": 10,
+    "repetitions": 5,
+    "cpu_budget": 57,
+    "languages": [
+      "cpp",
+      "rust",
+      "java",
+      "python",
+      "numba"
+    ],
+    "algorithms": [
+      "random",
+      "local",
+      "sa",
+      "ga",
+      "ig"
+    ],
+    "phase": "all"
+  },
+  "instances": {
+    "instances\\validation\\01.txt": "e903125dba25e0c319269aebba6b7c6e51319d2286857bf3414da61195a3217f",
+    "instances\\validation\\02.txt": "3e8711c50e7bb9097e506342e693b8c4fd35145e2344f05debf95852c727bbfa",
+    "instances\\validation\\03.txt": "f5912f99f359fc63bfca71d5453afb00ffff3d18a646cb8b49513e0832a4fae4",
+    "instances\\validation\\04.txt": "4f0df29334a2604b3fc8b962e05a94b6ad344222e2519e660bff04ea97ef8159",
+    "instances\\validation\\05.txt": "01604ea31dbf2cb02045b435dae88497a0ba9d7eabb81ded732665f3b90735e8",
+    "instances\\validation\\06.txt": "7738834e394abad078b50e8f88350b918b56b74ff8187a7de432455062e28b0d",
+    "instances\\validation\\07.txt": "37eb36fee2c42839ec8bb77fbece09b5a61f9a3599cc555fcef8ef2665a11177",
+    "instances\\validation\\08.txt": "a05a7b1d496fb61d4a64bd6f3b7e3e33023748707b00a06d10710f0c9f157e55",
+    "instances\\validation\\09.txt": "da3cc9aa0459dae1e860b8aed9fd22a4e8e4d3029cd0653f9fe758600946ae88",
+    "instances\\validation\\10.txt": "12b79424df519c6cfd1b1528acf487b14f4d3f69f36407a021bf4dec15340ffe"
+  },
+  "host": {
+    "platform": "Windows-11-10.0.26300-SP0",
+    "processor": "Intel64 Family 6 Model 186 Stepping 2, GenuineIntel",
+    "logical_cpus": 16,
+    "processor_name": "13th Gen Intel(R) Core(TM) i7-13620H"
+  },
+  "versions": {
+    "cpp": "g++ (MinGW-W64 x86_64-ucrt-posix-seh, built by Brecht Sanders, r8) 13.2.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "rust": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+    "java": "java version \"26.0.1\" 2026-04-21\nJava(TM) SE Runtime Environment (build 26.0.1+8-34)\nJava HotSpot(TM) 64-Bit Server VM (build 26.0.1+8-34, mixed mode, sharing)",
+    "python": "Python 3.14.5",
+    "packages": {
+      "numpy": "2.5.1",
+      "numba": "0.68.0",
+      "llvmlite": "0.50.0"
+    },
+    "commands": [
+      [
+        "g++",
+        "-std=c++20",
+        "-O3",
+        "-DNDEBUG",
+        "-static-libgcc",
+        "-static-libstdc++",
+        "C:\\Users\\tory0\\Desktop\\Programaci\u00f3n\\Global\\OptContest\\solvers\\cpp\\main.cpp",
+        "-o",
+        "C:\\Users\\tory0\\Desktop\\Programaci\u00f3n\\Global\\OptContest\\build\\cpp.exe"
+      ],
+      [
+        "C:\\Users\\tory0\\Desktop\\Programaci\u00f3n\\Global\\OptContest\\.tools\\cargo\\bin\\rustc.exe",
+        "--edition=2024",
+        "-O",
+        "-C",
+        "lto=yes",
+        "-C",
+        "codegen-units=1",
+        "C:\\Users\\tory0\\Desktop\\Programaci\u00f3n\\Global\\OptContest\\solvers\\rust\\main.rs",
+        "-o",
+        "C:\\Users\\tory0\\Desktop\\Programaci\u00f3n\\Global\\OptContest\\build\\rust.exe"
+      ],
+      [
+        "javac",
+        "--release",
+        "17",
+        "-encoding",
+        "UTF-8",
+        "-d",
+        "C:\\Users\\tory0\\Desktop\\Programaci\u00f3n\\Global\\OptContest\\build\\java",
+        "C:\\Users\\tory0\\Desktop\\Programaci\u00f3n\\Global\\OptContest\\solvers\\java\\Core.java",
+        "C:\\Users\\tory0\\Desktop\\Programaci\u00f3n\\Global\\OptContest\\solvers\\java\\Ga.java",
+        "C:\\Users\\tory0\\Desktop\\Programaci\u00f3n\\Global\\OptContest\\solvers\\java\\Ig.java",
+        "C:\\Users\\tory0\\Desktop\\Programaci\u00f3n\\Global\\OptContest\\solvers\\java\\LocalSearch.java",
+        "C:\\Users\\tory0\\Desktop\\Programaci\u00f3n\\Global\\OptContest\\solvers\\java\\RandomSearch.java",
+        "C:\\Users\\tory0\\Desktop\\Programaci\u00f3n\\Global\\OptContest\\solvers\\java\\Sa.java",
+        "C:\\Users\\tory0\\Desktop\\Programaci\u00f3n\\Global\\OptContest\\solvers\\java\\Solver.java"
+      ]
+    ],
+    "source_hash": "2a2a0de7d7b3400a83f01b0a36a8b3873680aa976d43667a9abec64993290116"
+  }
+}

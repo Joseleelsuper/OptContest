@@ -1,0 +1,98 @@
+{
+  "config": {
+    "instances": 10,
+    "repetitions": 5,
+    "cpu_budget": 57,
+    "languages": [
+      "cpp-ref",
+      "cpp-v3-t2"
+    ],
+    "algorithms": [
+      "ig"
+    ],
+    "phase": "cpu"
+  },
+  "instances": {
+    "instances\\hardware-validation\\01.txt": "d4afb75bb475f9caf1fea9e05887b6f7a8fae12e8215aad5f391677554f4f149",
+    "instances\\hardware-validation\\02.txt": "af765baa4a1aa18695bc215c5b0005dde7df47e56d5cc4a17abf1454c8fa4ad9",
+    "instances\\hardware-validation\\03.txt": "732e6e987634c6a65120a3d62a78166eef7467ba924ca3e61d268bff0fc5a049",
+    "instances\\hardware-validation\\04.txt": "2c026f8ab7f6d376cbd47337afc15304575051c38fee54f3af064c744adb5d41",
+    "instances\\hardware-validation\\05.txt": "a117c68d545b61400cd26e5db5c70a66a4786a425a66169d2a4608447689a211",
+    "instances\\hardware-validation\\06.txt": "0b78177b9f4b1b20130aee100c9dfa09807edeae9f3e00378043c6af88b2d401",
+    "instances\\hardware-validation\\07.txt": "a86d6bc1b3f49299e4cf11c42b3e26190187276344a80657e71e7b03e30aca6c",
+    "instances\\hardware-validation\\08.txt": "cd03878d4f88f3cbb037d6d24f278b2857ae2b9b30be18dfd2b358654691cf72",
+    "instances\\hardware-validation\\09.txt": "bb549220c666e787498dfd53427ed0ac6fd6ddb5b33367665b0f2f90b2fe402a",
+    "instances\\hardware-validation\\10.txt": "fc5f8189d86b12bbbc3ef4771948e91600635f397f75efefc3f566153cfdf530"
+  },
+  "host": {
+    "platform": "Windows-11-10.0.26300-SP0",
+    "processor": "Intel64 Family 6 Model 186 Stepping 2, GenuineIntel",
+    "logical_cpus": 16,
+    "processor_name": "13th Gen Intel(R) Core(TM) i7-13620H"
+  },
+  "versions": {
+    "cpp": "g++ (MinGW-W64 x86_64-ucrt-posix-seh, built by Brecht Sanders, r8) 13.2.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "commands": [
+      [
+        "g++",
+        "-std=c++20",
+        "-O3",
+        "-DNDEBUG",
+        "-static-libgcc",
+        "-static-libstdc++",
+        "C:\\Users\\tory0\\Desktop\\Programaci\u00f3n\\Global\\OptContest\\solvers\\cpp\\main.cpp",
+        "-o",
+        "C:\\Users\\tory0\\Desktop\\Programaci\u00f3n\\Global\\OptContest\\build\\cpp.exe"
+      ],
+      [
+        "g++",
+        "-std=c++20",
+        "-O3",
+        "-DNDEBUG",
+        "-march=x86-64-v3",
+        "-static",
+        "-pthread",
+        "-I",
+        "C:\\Users\\tory0\\Desktop\\Programaci\u00f3n\\Global\\OptContest\\solvers\\cpp",
+        "C:\\Users\\tory0\\Desktop\\Programaci\u00f3n\\Global\\OptContest\\experiments\\parallel.cpp",
+        "-o",
+        "C:\\Users\\tory0\\Desktop\\Programaci\u00f3n\\Global\\OptContest\\build\\ig-parallel.exe"
+      ]
+    ],
+    "source_hash": "b2d7eace1509923d4618fcc9d511a0188fe68bea91765e2d7049755d9af2015e",
+    "controller_python": "3.14.5 (tags/v3.14.5:5607950, May 10 2026, 10:43:50) [MSC v.1944 64 bit (AMD64)]",
+    "hardware": {
+      "source_hash": "313e4f5fd5fef395f987e4bc40f4088b222d7403610f55eabe61606dd66ce768",
+      "commands": [
+        [
+          "g++",
+          "-std=c++20",
+          "-O3",
+          "-DNDEBUG",
+          "-static-libgcc",
+          "-static-libstdc++",
+          "C:\\Users\\tory0\\Desktop\\Programaci\u00f3n\\Global\\OptContest\\solvers\\cpp\\main.cpp",
+          "-o",
+          "C:\\Users\\tory0\\Desktop\\Programaci\u00f3n\\Global\\OptContest\\build\\cpp.exe"
+        ],
+        [
+          "g++",
+          "-std=c++20",
+          "-O3",
+          "-DNDEBUG",
+          "-march=x86-64-v3",
+          "-static",
+          "-pthread",
+          "-I",
+          "C:\\Users\\tory0\\Desktop\\Programaci\u00f3n\\Global\\OptContest\\solvers\\cpp",
+          "C:\\Users\\tory0\\Desktop\\Programaci\u00f3n\\Global\\OptContest\\experiments\\parallel.cpp",
+          "-o",
+          "C:\\Users\\tory0\\Desktop\\Programaci\u00f3n\\Global\\OptContest\\build\\ig-parallel.exe"
+        ]
+      ],
+      "compiler": "g++ (MinGW-W64 x86_64-ucrt-posix-seh, built by Brecht Sanders, r8) 13.2.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+      "reference_hash": "3fa47d031b920e5e550f24acd4b181f5bd96be817145d3d32cd357b00e5dca9e",
+      "binary_hash": "05d1f826fd477e52842f6efe50c04b16f7cf385b30d31e9655d4f9737dde23ef"
+    }
+  }
+}

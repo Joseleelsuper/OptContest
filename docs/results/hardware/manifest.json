@@ -1,0 +1,97 @@
+{
+  "config": {
+    "instances": 5,
+    "repetitions": 2,
+    "cpu_budget": 57,
+    "languages": [
+      "cpp-ref",
+      "cpp-v3-t1",
+      "cpp-v3-t2",
+      "cpp-v3-t4",
+      "cpp-v3-t8",
+      "cpp-v3-t0"
+    ],
+    "algorithms": [
+      "ig"
+    ],
+    "phase": "cpu"
+  },
+  "instances": {
+    "instances\\tuning\\01.txt": "5c66555df542301ffcb92cbb41f360b92e7c9387b43b5c5094561baf19d5e31c",
+    "instances\\tuning\\02.txt": "4a310c97b82531a0901647068227f491dc675305066d33994e12567350bdf613",
+    "instances\\tuning\\03.txt": "ec077c38b520a72126d9fb412f430645e9560fda13804bb4149ce46704cc33c0",
+    "instances\\tuning\\04.txt": "beaf1e7169edc2f2812acb9ac3fb2637d3e36b29fb984c04acdd0ef85ee8ea3a",
+    "instances\\tuning\\05.txt": "6e5b7a6b2ff6c862601d14a7d86bf7f2517bae04380b0c6db62505e533c6daf0"
+  },
+  "host": {
+    "platform": "Windows-11-10.0.26300-SP0",
+    "processor": "Intel64 Family 6 Model 186 Stepping 2, GenuineIntel",
+    "logical_cpus": 16,
+    "processor_name": "13th Gen Intel(R) Core(TM) i7-13620H"
+  },
+  "versions": {
+    "cpp": "g++ (MinGW-W64 x86_64-ucrt-posix-seh, built by Brecht Sanders, r8) 13.2.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "commands": [
+      [
+        "g++",
+        "-std=c++20",
+        "-O3",
+        "-DNDEBUG",
+        "-static-libgcc",
+        "-static-libstdc++",
+        "C:\\Users\\tory0\\Desktop\\Programaci\u00f3n\\Global\\OptContest\\solvers\\cpp\\main.cpp",
+        "-o",
+        "C:\\Users\\tory0\\Desktop\\Programaci\u00f3n\\Global\\OptContest\\build\\cpp.exe"
+      ],
+      [
+        "g++",
+        "-std=c++20",
+        "-O3",
+        "-DNDEBUG",
+        "-march=x86-64-v3",
+        "-static",
+        "-pthread",
+        "-I",
+        "C:\\Users\\tory0\\Desktop\\Programaci\u00f3n\\Global\\OptContest\\solvers\\cpp",
+        "C:\\Users\\tory0\\Desktop\\Programaci\u00f3n\\Global\\OptContest\\experiments\\parallel.cpp",
+        "-o",
+        "C:\\Users\\tory0\\Desktop\\Programaci\u00f3n\\Global\\OptContest\\build\\ig-parallel.exe"
+      ]
+    ],
+    "source_hash": "b2d7eace1509923d4618fcc9d511a0188fe68bea91765e2d7049755d9af2015e",
+    "controller_python": "3.14.5 (tags/v3.14.5:5607950, May 10 2026, 10:43:50) [MSC v.1944 64 bit (AMD64)]",
+    "hardware": {
+      "source_hash": "f8591473b37ccd958bd96e663b47093e01c5f6fff70d2ed7219ba4336935fd30",
+      "commands": [
+        [
+          "g++",
+          "-std=c++20",
+          "-O3",
+          "-DNDEBUG",
+          "-static-libgcc",
+          "-static-libstdc++",
+          "C:\\Users\\tory0\\Desktop\\Programaci\u00f3n\\Global\\OptContest\\solvers\\cpp\\main.cpp",
+          "-o",
+          "C:\\Users\\tory0\\Desktop\\Programaci\u00f3n\\Global\\OptContest\\build\\cpp.exe"
+        ],
+        [
+          "g++",
+          "-std=c++20",
+          "-O3",
+          "-DNDEBUG",
+          "-march=x86-64-v3",
+          "-static",
+          "-pthread",
+          "-I",
+          "C:\\Users\\tory0\\Desktop\\Programaci\u00f3n\\Global\\OptContest\\solvers\\cpp",
+          "C:\\Users\\tory0\\Desktop\\Programaci\u00f3n\\Global\\OptContest\\experiments\\parallel.cpp",
+          "-o",
+          "C:\\Users\\tory0\\Desktop\\Programaci\u00f3n\\Global\\OptContest\\build\\ig-parallel.exe"
+        ]
+      ],
+      "compiler": "g++ (MinGW-W64 x86_64-ucrt-posix-seh, built by Brecht Sanders, r8) 13.2.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+      "reference_hash": "92934bb7c1816dea00a53803a5d72352c0f0ddae21e4b68a0c5b687b8f82bcae",
+      "binary_hash": "07646a4070d8e7b3be674703830c571168dadaebae51267e5dc2cf20ff0a40b7"
+    }
+  }
+}

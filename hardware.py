@@ -95,7 +95,7 @@ def checks():
 def export(team, threads, destination=None):
     folder = bench.export("cpp", "ig", team, destination)
     shutil.copyfile(ROOT / "experiments/parallel.hpp", folder / "parallel.hpp")
-    name = f"optcontest{int(team):02}"
+    name = next(folder.glob("optcontest*.cpp")).stem
     (folder / f"{name}.cpp").write_text(f'#include "parallel.hpp"\nint main(int argc, char** argv) {{ worker_count = {threads}; return parallel_run(argc, argv, true); }}\n', encoding="utf-8")
     (folder / "leeme.txt").write_text(f"Windows 11 x64 con AVX2. C++/IG, {threads or 'todos los'} hilos.\n"
         f"g++ {' '.join(FLAGS)} {name}.cpp -o {name}.exe\n.\\{name}.exe\n"

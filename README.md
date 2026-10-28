@@ -2,6 +2,30 @@
 
 Banco de pruebas para minimizar **Fmed** en un flow shop permutacional: cinco algoritmos × C++, Rust, Java, Python y Python con Numba. Windows 11 x64.
 
+## Entrega A2
+
+La entrega seleccionada es **C++/IG secuencial, destrucción de 6 órdenes, temperatura del 1 % del coste inicial y reinicio tras 400 ciclos sin mejora global**, con 57 s de CPU por ejecución.
+
+Descarga [optcontestA2.zip en la release v1.0.0](https://github.com/Joseleelsuper/OptContest/releases/tag/v1.0.0), extráelo y coloca `test.txt` junto al ejecutable. Desde PowerShell, en esa carpeta:
+
+```powershell
+.\optcontestA2.exe
+```
+
+El ejecutable devuelve **Fmed, CPU y secuencia**, en tres líneas, sin necesitar Python ni un compilador. El ZIP contiene también las fuentes necesarias y `leeme.txt`.
+
+- [Instrucciones de entrega y compilación](docs/ENTREGA.md).
+- [Algoritmos, metodología, resultados y límites de la comparación](docs/RESULTADOS.md).
+- [Notas de la release](docs/RELEASE-v1.0.0.md).
+
+Para generar de nuevo el ZIP desde el repositorio, con Python y GCC/MinGW disponibles:
+
+```powershell
+python tuning.py export --team A2
+```
+
+Se crean `submission/optcontestA2.zip` y su SHA-256. La exportación fija los parámetros de `cpp-ig-r400`; el exportador genérico del laboratorio conserva los parámetros originales.
+
 ## Ejecutar
 
 Necesitas Python 3.14, GCC/MinGW con C++20 y un JDK 17+. La preparación instala NumPy/Numba en `.venv` y Rust 1.99.1 en `.tools`, sin modificar el PATH global.
@@ -34,7 +58,7 @@ python bench.py run --instances 1 --repetitions 1 --cpu-budget 10 --results resu
 - Las evaluaciones cuentan candidatos, incluidas secuencias parciales de IG. No son una unidad de trabajo equivalente entre algoritmos distintos.
 - La búsqueda comprueba CPU cada 32 evaluaciones. El presupuesto solicitado es 57 s; se admiten hasta 0.5 s de finalización en el laboratorio y se termina el árbol de procesos si supera 60 s. Los fallos y excesos permanecen registrados y descartan al candidato del ranking fiable.
 
-Se generan cinco instancias de ajuste con semillas 1001–1005 y diez de evaluación con semillas 2001–2010, siempre de 75 órdenes × 20 máquinas y tiempos uniformes de 1 a 99. La campaña usa semillas de ejecución 1–5. El manifiesto conserva hashes, versiones, opciones de compilación y equipo. El conjunto de ajuste queda separado de la evaluación; esta versión compara parámetros fijos, sin ajuste automático.
+Se generan cinco instancias de ajuste con semillas 1001–1005 y diez de evaluación con semillas 2001–2010, siempre de 75 órdenes × 20 máquinas y tiempos uniformes de 1 a 99. La campaña usa semillas de ejecución 1–5. El manifiesto conserva hashes, versiones, opciones de compilación y equipo. El conjunto de ajuste queda separado de la evaluación; la campaña general compara parámetros fijos. El ajuste de C++/IG se describe más abajo.
 
 ## Algoritmos
 
@@ -72,7 +96,7 @@ El archivo contiene una cabecera `n m` y una fila por orden con los pares `máqu
 
 La secuencia `2 1` tiene coste 18 y Fmed 9. Las órdenes de la salida se numeran desde uno.
 
-Después de comparar, exporta únicamente el lenguaje y algoritmo elegidos, sustituyendo `XX` por tu número de equipo:
+Para exportar cualquier candidato base del laboratorio, sustituye `XX` por el identificador del equipo (letras o cifras, como `A2`):
 
 ```powershell
 python bench.py export --language cpp --algorithm ig --team XX
@@ -93,7 +117,7 @@ build\ig-parallel.exe --threads 0 --instance test.txt --cpu-budget 57
 python hardware.py export --team XX --threads 0
 ```
 
-Sustituye `XX` por el número de equipo. La exportación incluye las fuentes necesarias y el comando de compilación, sin dependencias adicionales a Windows. AVX2 requiere una CPU compatible; tanto el i7-13620H local como el Ryzen 9 9900X de las bases lo admiten.
+Sustituye `XX` por el identificador del equipo. La exportación incluye las fuentes necesarias y el comando de compilación, sin dependencias adicionales a Windows. AVX2 requiere una CPU compatible; tanto el i7-13620H local como el Ryzen 9 9900X de las bases lo admiten.
 
 Las nuevas pruebas comparan únicamente C++/IG: referencia original y variante AVX2 con 1, 2, 4, 8 y todos los hilos. Usan las cinco instancias de ajuste y dos semillas, siempre con 57 s de CPU total. Los 60 resultados se guardan en `results/hardware/`, con reanudación e informe HTML. La selección depende de Fmed bajo ese presupuesto; más hilos pueden consumirlo antes sin mejorar la solución. El ajuste específico del Ryzen requiere medir en ese equipo.
 

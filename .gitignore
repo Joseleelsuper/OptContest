@@ -2,6 +2,8 @@
 .tools/
 build/
 results/
+!docs/results/
+!docs/results/**
 submission/
 __pycache__/
 *.pyc

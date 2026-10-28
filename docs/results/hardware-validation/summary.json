@@ -1,0 +1,38 @@
+[
+  {
+    "phase": "cpu",
+    "language": "cpp-ref",
+    "algorithm": "ig",
+    "status": "COMPLETO",
+    "runs": 50,
+    "expected": 50,
+    "failures": 0,
+    "mean_initial": 3323.9186666666665,
+    "mean_final": 3130.6141333333335,
+    "median": 3128.92,
+    "stddev": 48.43687779381221,
+    "minimum": 3030.64,
+    "maximum": 3221.4533333333334,
+    "mean_cpu": 57.009375,
+    "mean_wall": 57.814537493993996,
+    "mean_evaluations": 132591398.4
+  },
+  {
+    "phase": "cpu",
+    "language": "cpp-v3-t2",
+    "algorithm": "ig",
+    "status": "COMPLETO",
+    "runs": 50,
+    "expected": 50,
+    "failures": 0,
+    "mean_initial": 3323.9186666666665,
+    "mean_final": 3131.732266666667,
+    "median": 3135.16,
+    "stddev": 48.35433747432073,
+    "minimum": 3030.866666666667,
+    "maximum": 3226.96,
+    "mean_cpu": 57.0240625,
+    "mean_wall": 28.954319203998892,
+    "mean_evaluations": 102142513.92
+  }
+]

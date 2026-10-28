@@ -385,10 +385,11 @@ def run(args):
 
 
 def export(language, algorithm, team, destination=None):
-    if not team.isascii() or not team.isdigit() or len(team) > 6:
-        raise ValueError("El equipo debe ser un número de hasta seis cifras")
-    name = f"optcontest{int(team):02}"
-    folder = Path(destination) if destination else ROOT / "submission" / f"{language}-{algorithm}-{int(team):02}"
+    if not team.isascii() or not team.isalnum() or len(team) > 6:
+        raise ValueError("El equipo debe contener de una a seis letras o cifras")
+    team = f"{int(team):02}" if team.isdigit() else team
+    name = f"optcontest{team}"
+    folder = Path(destination) if destination else ROOT / "submission" / f"{language}-{algorithm}-{team}"
     folder.mkdir(parents=True, exist_ok=False)
     module = MODULES[algorithm]
     source = ROOT / "solvers" / ("python" if language == "numba" else language)

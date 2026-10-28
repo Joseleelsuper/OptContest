@@ -1,0 +1,32 @@
+{
+  "candidate": "cpp-ig-r400",
+  "parameters": [
+    6,
+    100,
+    400
+  ],
+  "selected": "cpp-ig-r400",
+  "stage": "complete",
+  "comparison": {
+    "candidate_minus_base": -1.8527999999999794,
+    "wins": 25,
+    "ties": 12,
+    "losses": 13,
+    "by_instance": {
+      "instances\\tuning-validation\\01.txt": -1.1733333333332667,
+      "instances\\tuning-validation\\02.txt": -3.36266666666661,
+      "instances\\tuning-validation\\03.txt": 0.03999999999996362,
+      "instances\\tuning-validation\\04.txt": -3.0346666666665443,
+      "instances\\tuning-validation\\05.txt": -1.9013333333333322,
+      "instances\\tuning-validation\\06.txt": -4.11200000000008,
+      "instances\\tuning-validation\\07.txt": 1.6266666666666425,
+      "instances\\tuning-validation\\08.txt": -6.231999999999971,
+      "instances\\tuning-validation\\09.txt": 0.9920000000000982,
+      "instances\\tuning-validation\\10.txt": -1.3706666666666933
+    },
+    "bootstrap_95_by_instance": [
+      -3.2690666666666677,
+      -0.45653333333327284
+    ]
+  }
+}
