@@ -102,3 +102,30 @@ Para confirmar la selección de dos hilos, `instances/hardware-validation/` cont
 ```powershell
 python hardware.py run --instance-dir instances/hardware-validation --instances 10 --repetitions 5 --threads 2 --results results/hardware-validation
 ```
+
+La confirmación terminó sin fallos: Fmed medio 3130.614 para la referencia y 3131.732 para dos hilos. En las 50 parejas, la referencia ganó 24 veces, empató 13 y perdió 13. La ventaja inicial de dos hilos no se confirmó; el siguiente ajuste usa un hilo y las opciones originales de compilación.
+
+## Ajuste de C++/IG
+
+```powershell
+python tuning.py check
+python tuning.py run
+```
+
+Se cambia un parámetro cada vez, manteniendo la construcción y búsqueda local:
+
+| Variante | Órdenes destruidas | Factor de temperatura | Reinicio tras ciclos sin mejora |
+|---|---:|---:|---:|
+| `cpp-ig-base` | 6 | 0.010 | 200 |
+| `cpp-ig-d4` | 4 | 0.010 | 200 |
+| `cpp-ig-d8` | 8 | 0.010 | 200 |
+| `cpp-ig-t50` | 6 | 0.005 | 200 |
+| `cpp-ig-t200` | 6 | 0.020 | 200 |
+| `cpp-ig-r100` | 6 | 0.010 | 100 |
+| `cpp-ig-r400` | 6 | 0.010 | 400 |
+
+La temperatura sigue siendo `max(1, factor × coste inicial)`. Los valores se fijan al compilar; la función `ig` conserva sus parámetros originales.
+
+El ajuste usa cinco instancias y dos semillas: 70 ejecuciones. Se elige el menor Fmed medio entre candidatos completos sin fallos; los empates conservan la base. Si gana una variante, se compara automáticamente con la base sobre diez instancias nuevas de `instances/tuning-validation/`, generadas con `random.Random(4001)` a `random.Random(4010)`, y cinco semillas: otras 100 ejecuciones. Todas usan 57 s de CPU, orden alternado y verificación independiente.
+
+Los informes quedan en `results/ig-tuning/search/report.html` y `results/ig-tuning/validation/report.html`; `selection.json` recoge la decisión. La comparación final incluye victorias, empates, derrotas y diferencia media de Fmed (candidato menos base). El intervalo bootstrap del 95 % remuestrea las diez medias por instancia 10 000 veces con semilla cero; se selecciona la variante solo si todo el intervalo queda por debajo de cero. Este intervalo mide incertidumbre entre estas instancias, sin demostrar superioridad universal. El mismo comando reanuda; las campañas anteriores permanecen en sus carpetas.

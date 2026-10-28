@@ -1,7 +1,9 @@
 #pragma once
 #include "core.hpp"
 
-inline void ig(Search& s) {
+template<int Destruction = 6, int TemperatureBps = 100, int Restart = 200>
+inline void ig_search(Search& s) {
+    static_assert(Destruction > 0 && TemperatureBps > 0 && Restart > 0);
     auto q = s.reference;
     if (s.n < 2) { s.evaluate(q, s.n, 0); return; }
     Sequence order(s.n), removed(s.n);
@@ -13,10 +15,10 @@ inline void ig(Search& s) {
     if (value < 0) return;
     s.set_initial(q, value);
     value = s.local(q, value);
-    double temperature = std::max(1.0, 0.01 * s.initial_cost);
+    double temperature = std::max(1.0, (TemperatureBps / 10000.0) * s.initial_cost);
     auto candidate = q;
     std::vector<bool> marked(s.n);
-    int count = std::min(6, s.n), stale = 0;
+    int count = std::min(Destruction, s.n), stale = 0;
     while (s.active()) {
         auto previous_best = s.best_cost;
         s.randomize(order);
@@ -29,7 +31,7 @@ inline void ig(Search& s) {
         cost = s.local(candidate, cost);
         if (s.accept(value, cost, temperature)) { q = candidate; value = cost; }
         stale = s.best_cost < previous_best ? 0 : stale + 1;
-        if (stale == 200 && s.active()) {
+        if (stale == Restart && s.active()) {
             s.randomize(q);
             value = s.evaluate(q, s.n, 0);
             if (value < 0) break;
@@ -38,3 +40,5 @@ inline void ig(Search& s) {
         }
     }
 }
+
+inline void ig(Search& s) { ig_search(s); }
