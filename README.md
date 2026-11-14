@@ -26,6 +26,19 @@ python tuning.py export --team A2
 
 Se crean `submission/optcontestA2.zip` y su SHA-256. La exportación fija los parámetros de `cpp-ig-r400`; el exportador genérico del laboratorio conserva los parámetros originales.
 
+## Aplicación gráfica para Windows
+
+Compila desde la raíz del repositorio con Python y GCC/MinGW x64 (`g++` y `windres`).
+
+```powershell
+python tuning.py build-gui
+.\build\OptContest-GUI.exe
+```
+
+Pulsa **Abrir TXT…** para cargar una instancia y ver sus duraciones por orden y máquina. Pulsa **Optimizar** para ejecutar Iterated Greedy r400 con un presupuesto de 57 segundos de CPU. La gráfica muestra el mejor Fmed encontrado y **Ver en la mejor secuencia** ordena la matriz conforme al resultado. Puedes seleccionar y copiar la secuencia.
+
+**CPU de cálculo** mide el trabajo del hilo que ejecuta la búsqueda. **Tiempo total** mide el tiempo de reloj desde que pulsas **Optimizar** hasta que termina el cálculo. Si pulsas **Cancelar**, se muestra el mejor resultado alcanzado hasta ese momento. [Medición de CPU por hilo en Windows](https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getthreadtimes).
+
 ## Ejecutar
 
 Necesitas Python 3.14, GCC/MinGW con C++20 y un JDK 17+. La preparación instala NumPy/Numba en `.venv` y Rust 1.99.1 en `.tools`, sin modificar el PATH global.

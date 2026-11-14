@@ -126,6 +126,16 @@ def run(folder):
     print(json.dumps(decision, indent=2), flush=True)
 
 
+def build_gui():
+    binary = ROOT / "build/OptContest-GUI.exe"
+    binary.parent.mkdir(parents=True, exist_ok=True)
+    resource = binary.with_suffix(".o")
+    bench.call(["windres", "-I", ROOT / "gui", "-i", ROOT / "gui/app.rc", "-O", "coff", "-o", resource])
+    bench.call(["g++", *FLAGS, "-D_WIN32_WINNT=0x0A00", "-static", "-municode", "-mwindows", ROOT / "gui/main.cpp", resource,
+                "-o", binary, "-lcomctl32", "-lcomdlg32", "-lgdi32"])
+    return binary
+
+
 def export(team, destination=None):
     folder = bench.export("cpp", "ig", team, destination)
     entry = next(folder.glob("optcontest*.cpp"))
@@ -219,12 +229,14 @@ def checks():
 
 def main():
     parser = argparse.ArgumentParser(description="Ajuste y validación separados, solo C++/IG secuencial")
-    parser.add_argument("action", choices=("check", "run", "export"))
+    parser.add_argument("action", choices=("check", "run", "export", "build-gui"))
     parser.add_argument("--results", type=Path, default=ROOT / "results/ig-tuning")
     parser.add_argument("--team")
     parser.add_argument("--destination", type=Path)
     args = parser.parse_args()
-    if args.action == "export":
+    if args.action == "build-gui":
+        print(build_gui())
+    elif args.action == "export":
         if args.team is None: parser.error("export requiere --team")
         print(export(args.team, args.destination))
     elif args.action == "check": checks()

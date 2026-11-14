@@ -33,6 +33,8 @@ struct Search {
     double cpu_limit;
     Cost evaluation_limit, evaluations = 0, reference_cost, best_cost, initial_cost;
     bool stopped = false;
+    bool (*budget_reached)(const Search&, void*) = nullptr;
+    void* budget_context = nullptr;
     Sequence reference, best, initial;
 
     Search(int jobs, int machines, std::vector<Cost> processing, std::uint64_t seed, double cpu, Cost limit)
@@ -62,7 +64,9 @@ struct Search {
     }
     bool active() {
         if (stopped || best_cost == 0) return false;
-        if (evaluations >= evaluation_limit || (evaluations % 32 == 0 && cpu_time() >= cpu_limit)) stopped = true;
+        if (evaluations >= evaluation_limit) stopped = true;
+        else if (evaluations % 32 == 0)
+            stopped = budget_reached ? budget_reached(*this, budget_context) : cpu_time() >= cpu_limit;
         return !stopped;
     }
     void set_prefix(const Sequence& q, int length) {
@@ -171,6 +175,46 @@ inline std::vector<Cost> tokens(const std::string& line) {
     return values;
 }
 
+struct Instance {
+    int jobs = 0, machines = 0;
+    std::vector<Cost> durations;
+};
+
+inline Instance read_instance(std::ifstream& file) {
+    if (!file) throw std::runtime_error("No se puede leer la instancia");
+    file.seekg(0, std::ios::end);
+    const auto size = file.tellg();
+    if (size < 0) throw std::runtime_error("No se puede leer la instancia");
+    if (size > 1048576) throw std::runtime_error("Archivo demasiado grande");
+    std::string text(static_cast<std::size_t>(size), '\0');
+    file.seekg(0);
+    if (!file.read(text.data(), static_cast<std::streamsize>(text.size())))
+        throw std::runtime_error("No se puede leer la instancia");
+    if (text.starts_with("\xEF\xBB\xBF")) text.erase(0, 3);
+    std::istringstream input(text);
+    std::vector<std::vector<Cost>> lines;
+    std::string line;
+    while (std::getline(input, line)) { auto row = tokens(line); if (!row.empty()) lines.push_back(std::move(row)); }
+    if (lines.empty() || lines[0].size() != 2) throw std::runtime_error("Cabecera esperada: n m");
+    const auto n = lines[0][0], m = lines[0][1];
+    if (n < 1 || m < 1 || n > 10000 || m > 10000 || n * m > 10000 || lines.size() != std::size_t(n + 1))
+        throw std::runtime_error("Dimensiones o filas incorrectas");
+    Instance instance{int(n), int(m), {}};
+    instance.durations.reserve(n * m);
+    Cost maximum = 0;
+    for (int i = 1; i <= n; ++i) {
+        if (lines[i].size() != std::size_t(2 * m)) throw std::runtime_error("Fila incorrecta");
+        for (int j = 0; j < m; ++j) {
+            const auto duration = lines[i][2 * j + 1];
+            if (lines[i][2 * j] != j || duration < 0) throw std::runtime_error("Par máquina-duración incorrecto");
+            instance.durations.push_back(duration);
+            maximum = std::max(maximum, duration);
+        }
+    }
+    if (maximum > std::numeric_limits<Cost>::max() / n / (n + m)) throw std::runtime_error("Posible desbordamiento int64");
+    return instance;
+}
+
 inline std::string algorithm(int argc, char** argv) {
     for (int i = 1; i + 1 < argc; ++i) if (std::string(argv[i]) == "--algorithm") return argv[i + 1];
     return "ig";
@@ -205,31 +249,9 @@ inline int run(int argc, char** argv, void (*solve)(Search&), const std::string&
         if (has_limit) cpu = 86400;
         if (!std::isfinite(cpu) || cpu <= 0 || limit < 1) throw std::runtime_error("Presupuesto incorrecto");
         std::ifstream file(path, std::ios::binary);
-        if (!file) throw std::runtime_error("No se puede leer la instancia");
-        std::string text((std::istreambuf_iterator<char>(file)), {});
-        if (text.size() > 1048576) throw std::runtime_error("Archivo demasiado grande");
-        if (text.starts_with("\xEF\xBB\xBF")) text.erase(0, 3);
-        std::istringstream input(text);
-        std::vector<std::vector<Cost>> lines;
-        std::string line;
-        while (std::getline(input, line)) { auto row = tokens(line); if (!row.empty()) lines.push_back(std::move(row)); }
-        if (lines.empty() || lines[0].size() != 2) throw std::runtime_error("Cabecera esperada: n m");
-        auto n = lines[0][0], m = lines[0][1];
-        if (n < 1 || m < 1 || n > 10000 || m > 10000 || n * m > 10000 || lines.size() != std::size_t(n + 1))
-            throw std::runtime_error("Dimensiones o filas incorrectas");
-        std::vector<Cost> p;
-        Cost maximum = 0;
-        for (int i = 1; i <= n; ++i) {
-            if (lines[i].size() != std::size_t(2 * m)) throw std::runtime_error("Fila incorrecta");
-            for (int j = 0; j < m; ++j) {
-                auto duration = lines[i][2 * j + 1];
-                if (lines[i][2 * j] != j || duration < 0) throw std::runtime_error("Par máquina-duración incorrecto");
-                p.push_back(duration);
-                maximum = std::max(maximum, duration);
-            }
-        }
-        if (maximum > std::numeric_limits<Cost>::max() / n / (n + m)) throw std::runtime_error("Posible desbordamiento int64");
-        Search s(int(n), int(m), std::move(p), seed, cpu, limit);
+        auto instance = read_instance(file);
+        const int n = instance.jobs;
+        Search s(n, instance.machines, std::move(instance.durations), seed, cpu, limit);
         solve(s);
         auto print_sequence = [](const Sequence& q, bool json) {
             if (json) std::cout << '[';
